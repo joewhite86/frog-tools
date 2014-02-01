@@ -1,4 +1,4 @@
-package de.whitefrog.tools;
+package de.whitefrog.utils;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
