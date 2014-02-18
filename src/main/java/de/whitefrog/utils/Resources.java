@@ -9,9 +9,13 @@ import java.net.URL;
 
 public class Resources {
   static final Logger logger = LoggerFactory.getLogger(Resources.class);
+
+  private Resources() {}
+
   public static URL getPropertyUrl(String filename) throws ConfigurationException {
     return Resources.getProperties(filename).getURL();
   }
+
   public static PropertiesConfiguration getProperties(String filename) throws ConfigurationException {
     String env = System.getProperty("semantic.env");
 

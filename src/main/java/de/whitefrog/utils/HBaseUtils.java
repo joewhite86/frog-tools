@@ -8,6 +8,8 @@ import org.apache.hadoop.hbase.client.HConnection;
 import java.io.IOException;
 
 public class HBaseUtils {
+  private HBaseUtils() {}
+
   public static void createTable(HConnection connection, String tableName, String... columnFamilies) throws IOException {
     HBaseAdmin hbase = new HBaseAdmin(connection);
     HTableDescriptor descriptor = new HTableDescriptor(tableName);
