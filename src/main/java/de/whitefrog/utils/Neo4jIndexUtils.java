@@ -5,13 +5,28 @@ import org.apache.lucene.queryParser.QueryParser;
 import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphdb.index.Index;
 import org.neo4j.graphdb.index.IndexHits;
+import org.neo4j.index.lucene.QueryContext;
 
-import java.util.NoSuchElementException;
+import java.util.*;
 
 public class Neo4jIndexUtils {
+  private static QueryContext buildQuery(String field, String value) {
+    String query = QueryParser.escape(value).replace(" ", "\\ ");
+    if(value.contains("*")) query = query.replace("\\*", "*");
+    return new QueryContext(field + ":" + query);
+  }
+  private static QueryContext buildQuery(String field, String value, Map<String, String> sorting) {
+    QueryContext context = buildQuery(field, value);
+
+    for(String key: sorting.keySet()) {
+      context.sort(key, sorting.get(key));
+    }
+
+    return context;
+  }
   public static <T extends PropertyContainer> T querySingle(Index<T> index, String field, String query) {
     if(query == null) throw new NullPointerException();
-    try(IndexHits<T> results = index.query(field + ":\"" + QueryParser.escape(query) + "\"")) {
+    try(IndexHits<T> results = index.query(buildQuery(field, query))) {
       if(results.hasNext()) {
         return results.getSingle();
       }
@@ -21,23 +36,25 @@ public class Neo4jIndexUtils {
       throw new IllegalStateException(String.format("found more than one element with %s \"%s\"", field, query));
     }
     catch(NullPointerException e) {
-      throw new QueryParseException(query);
+      throw new QueryParseException(query, e);
     }
   }
 
-  public static <T extends PropertyContainer> T query(Index<T> index, String field, String query) {
+  public static <T extends PropertyContainer> Set<T> query(Index<T> index, String field, String query) {
+    return query(index, field, query, new HashMap<String, String>());
+  }
+
+  public static <T extends PropertyContainer> Set<T> query(Index<T> index, String field, String query, Map<String, String> sorting) {
     if(query == null) throw new NullPointerException();
-    try(IndexHits<T> results = index.query(field + ":\"" + QueryParser.escape(query) + "\"")) {
-      if(results.hasNext()) {
-        return results.getSingle();
+    Set<T> nodes = new HashSet<>();
+    try(IndexHits<T> results = index.query(buildQuery(field, query, sorting))) {
+      for(T node: results) {
+        nodes.add(node);
       }
-      else return null;
-    }
-    catch(NoSuchElementException e) {
-      throw new IllegalStateException(String.format("found more than one element with %s \"%s\"", field, query));
+      return nodes;
     }
     catch(NullPointerException e) {
-      throw new QueryParseException(query);
+      throw new QueryParseException(query, e);
     }
   }
 }
