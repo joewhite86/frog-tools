@@ -12,7 +12,7 @@ import java.util.*;
 public class Neo4jIndexUtils {
   private static QueryContext buildQuery(String field, String value, boolean allowWildcard) {
     String query = QueryParser.escape(value).replace(" ", "\\ ").replace("AND", "\\AND").replace("OR", "\\OR");
-    if(!allowWildcard && value.contains("*")) query = query.replace("\\*", "*");
+    if(allowWildcard && value.contains("*")) query = query.replace("\\*", "*");
     return new QueryContext(field + ":" + query);
   }
   private static QueryContext buildQuery(String field, String value, boolean allowWildcard, Map<String, String> sorting) {
