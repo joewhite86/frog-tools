@@ -11,7 +11,7 @@ import java.util.*;
 
 public class Neo4jIndexUtils {
   private static QueryContext buildQuery(String field, String value, boolean allowWildcard) {
-    String query = QueryParser.escape(value).replace(" ", "\\ ").replace("AND", "\\AND").replace("OR", "\\OR");
+    String query = QueryParser.escape(value).replace(" ", "\\ ");
     if(allowWildcard && value.contains("*")) query = query.replace("\\*", "*");
     return new QueryContext(field + ":" + query);
   }
