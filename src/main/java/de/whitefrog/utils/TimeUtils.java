@@ -12,14 +12,21 @@ public class TimeUtils {
     final long min = TimeUnit.MILLISECONDS.toMinutes(i - TimeUnit.HOURS.toMillis(hr));
     final long sec = TimeUnit.MILLISECONDS.toSeconds(i - TimeUnit.HOURS.toMillis(hr) - TimeUnit.MINUTES.toMillis(min));
     final long ms = TimeUnit.MILLISECONDS.toMillis(i - TimeUnit.HOURS.toMillis(hr) - TimeUnit.MINUTES.toMillis(min) - TimeUnit.SECONDS.toMillis(sec));
-    if((hr|min|sec) == 0) {
-      return String.format("%dms", ms);
+
+    if(days > 0) {
+      return String.format("%d days %d hours", days, hr);
     }
-    else if(days > 0) {
-      return String.format("%ddays %02d:%02d:%02d", days, hr, min, sec);
+    else if(hr > 0) {
+      return String.format("%d hours %d minutes", hr, min);
+    }
+    else if(min > 0) {
+      return String.format("%d minutes %d seconds", min, sec);
+    }
+    else if(sec > 0) {
+      return String.format("%d seconds %d ms", sec, ms);
     }
     else {
-      return String.format("%02d:%02d:%02d", hr, min, sec);
+      return String.format("%dms", ms);
     }
   }
 }
