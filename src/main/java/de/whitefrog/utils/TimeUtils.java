@@ -9,7 +9,7 @@ public class TimeUtils {
     final long hr = TimeUnit.MILLISECONDS.toHours(i - TimeUnit.DAYS.toMillis(days));
     final long min = TimeUnit.MILLISECONDS.toMinutes(i - TimeUnit.DAYS.toMillis(days) - TimeUnit.HOURS.toMillis(hr));
     final long sec = TimeUnit.MILLISECONDS.toSeconds(i - TimeUnit.DAYS.toMillis(days) - TimeUnit.HOURS.toMillis(hr) - TimeUnit.MINUTES.toMillis(min));
-    final long ms = TimeUnit.MILLISECONDS.toMillis(i - TimeUnit.DAYS.toMillis(days) - TimeUnit.HOURS.toMillis(hr) - TimeUnit.MINUTES.toMillis(min) - TimeUnit.SECONDS.toMillis(sec));
+    final long ms = i - TimeUnit.DAYS.toMillis(days) - TimeUnit.HOURS.toMillis(hr) - TimeUnit.MINUTES.toMillis(min) - TimeUnit.SECONDS.toMillis(sec);
 
     if(days > 0) {
       return MessageFormat.format("{0} {0,choice,0#days|1#day|1<days} {1} {1,choice,0#hours|1#hour|1<hours}", days, hr);
