@@ -2,6 +2,7 @@ package de.whitefrog.utils;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,13 +21,15 @@ public class Resources {
     String env = System.getProperty("semantic.env");
 
     if("dev".equals(env)) {
-      int index = filename.indexOf(".properties");
-      String devFile = filename.substring(0, index) + ".dev.properties";
-      try {
-        return new PropertiesConfiguration(devFile);
-      }
-      catch(ConfigurationException e) {
-        logger.debug("no dev properties for file \"{}\"", filename);
+      String extension = FilenameUtils.getExtension(filename);
+      if(extension != null && !extension.isEmpty()) {
+        int index = filename.indexOf(extension);
+        String devFile = filename.substring(0, index) + ".dev" + extension;
+        try {
+          return new PropertiesConfiguration(devFile);
+        } catch (ConfigurationException e) {
+          logger.debug("no dev properties for file \"{}\"", filename);
+        }
       }
     }
 
