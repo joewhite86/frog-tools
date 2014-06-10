@@ -24,7 +24,7 @@ public class Resources {
       String extension = FilenameUtils.getExtension(filename);
       if(extension != null && !extension.isEmpty()) {
         int index = filename.indexOf(extension);
-        String devFile = filename.substring(0, index) + ".dev" + extension;
+        String devFile = filename.substring(0, index) + "dev." + extension;
         try {
           return new PropertiesConfiguration(devFile);
         } catch (ConfigurationException e) {
