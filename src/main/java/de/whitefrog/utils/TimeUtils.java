@@ -21,7 +21,7 @@ public class TimeUtils {
       return MessageFormat.format("{0} {0,choice,0#minutes|1#minute|1<minutes} {1} {1,choice,0#seconds|1#second|1<seconds}", min, sec);
     }
     else if(sec > 0) {
-      return MessageFormat.format("{0} {0,choice,0#seconds|1#second|1<seconds} {1}ms", days, hr);
+      return MessageFormat.format("{0} {0,choice,0#seconds|1#second|1<seconds} {1}ms", sec, ms);
     }
     else {
       return MessageFormat.format("{0}ms", ms);
